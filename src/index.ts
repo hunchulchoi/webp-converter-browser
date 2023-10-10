@@ -5,14 +5,12 @@ interface Options {
   keepRatio?: boolean
 }
 
-const DEFAULT_QUALITY = 0.75;
-
 function determineSize(
-  width?: number,
   originWidth: number,
-  height?: number,
   originHeight: number,
-  keepRatio?:boolean = false,
+  width?: number,
+  height?: number,
+  keepRatio:boolean = true,
 ) {
   // width와 height를 명확히 입력
   if (width && height) return { width, height };
@@ -38,6 +36,8 @@ function determineSize(
   return { width: originWidth, height: originHeight };
 }
 
+const DEFAULT_QUALITY = 0.75;
+
 /**
  * When it cause CORS, you may failed to use
  */
@@ -55,7 +55,8 @@ export function srcToWebP(
     image.src = src;
     image.crossOrigin = 'anonymous';
     image.onload = (e) => {
-      const size : {width: number, height: number} = determineSize(width, image.width, height, image.height, keepRatio);
+      // eslint-disable-next-line max-len
+      const size : {width: number, height: number} = determineSize(image.width, image.height, width, height, keepRatio);
       canvas.width = size.width;
       canvas.height = size.height;
       // @ts-ignore
